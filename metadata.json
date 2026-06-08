@@ -1,0 +1,7 @@
+{
+  "name": "Sauh Ledger",
+  "packageName": "com.sauhinc.sauhleger",
+  "description": "A modern offline-first fintech business ledger app for small business owners in India, built by Sauh Inc. with Material 3 design, multi-business support, GST tracking, customer dues, visual reports, and backup services.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

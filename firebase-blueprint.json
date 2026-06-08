@@ -1,0 +1,131 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile metadata",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "mobile": { "type": "string" },
+        "email": { "type": "string" },
+        "businessName": { "type": "string" },
+        "gstNumber": { "type": "string" },
+        "isLoggedIn": { "type": "boolean" }
+      },
+      "required": ["id", "name", "email"]
+    },
+    "Business": {
+      "title": "Business",
+      "description": "Business entities owned by the user",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "mobile": { "type": "string" },
+        "email": { "type": "string" },
+        "gstNumber": { "type": "string" }
+      },
+      "required": ["id", "name"]
+    },
+    "Customer": {
+      "title": "Customer",
+      "description": "Customers belonging to a business",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "businessId": { "type": "string" },
+        "name": { "type": "string" },
+        "mobile": { "type": "string" },
+        "openingBalance": { "type": "number" },
+        "balance": { "type": "number" },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "isDeleted": { "type": "boolean" },
+        "deletedAt": { "type": "string" }
+      },
+      "required": ["id", "businessId", "name", "mobile", "openingBalance", "balance", "createdAt", "isDeleted"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Financial ledger transactions",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "businessId": { "type": "string" },
+        "customerId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "amount": { "type": "number" },
+        "type": { "type": "string", "enum": ["given", "received", "expense", "salary", "loan", "advance"] },
+        "category": { "type": "string" },
+        "date": { "type": "string" },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "isDeleted": { "type": "boolean" },
+        "deletedAt": { "type": "string" }
+      },
+      "required": ["id", "businessId", "amount", "type", "category", "date", "createdAt", "isDeleted"]
+    },
+    "Reminder": {
+      "title": "Reminder",
+      "description": "GST, customer, and salary alert reminders",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "businessId": { "type": "string" },
+        "type": { "type": "string", "enum": ["gst", "customer", "salary"] },
+        "title": { "type": "string" },
+        "amount": { "type": "number" },
+        "customerId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "date": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "completed"] }
+      },
+      "required": ["id", "businessId", "type", "title", "date", "status"]
+    },
+    "GstFiling": {
+      "title": "GstFiling",
+      "description": "GST record filing entries",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "businessId": { "type": "string" },
+        "year": { "type": "number" },
+        "month": { "type": "string" },
+        "baseAmount": { "type": "number" },
+        "rate": { "type": "number" },
+        "gstType": { "type": "string", "enum": ["CGST+SGST", "IGST"] },
+        "calculatedTax": { "type": "number" },
+        "status": { "type": "string", "enum": ["pending", "filed"] },
+        "filedAt": { "type": "string" }
+      },
+      "required": ["id", "businessId", "year", "month", "baseAmount", "rate", "gstType", "calculatedTax", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Individual user document containing metadata profile"
+    },
+    "/users/{userId}/businesses/{businessId}": {
+      "schema": "Business",
+      "description": "Businesses added or managed by a user"
+    },
+    "/users/{userId}/customers/{customerId}": {
+      "schema": "Customer",
+      "description": "Customers registered under a business unit"
+    },
+    "/users/{userId}/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "Financial ledger activity ledgers"
+    },
+    "/users/{userId}/reminders/{reminderId}": {
+      "schema": "Reminder",
+      "description": "Reminders set by the user for operations"
+    },
+    "/users/{userId}/gstFilings/{gstFilingId}": {
+      "schema": "GstFiling",
+      "description": "Filing histories for GST operations"
+    }
+  }
+}

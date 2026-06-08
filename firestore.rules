@@ -1,0 +1,98 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net (default-deny)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Rules for individual user profiles
+    match /users/{userId} {
+      allow read, get, list: if isOwner(userId);
+      allow create, update: if isOwner(userId) && 
+        incoming().id == userId &&
+        incoming().email is string &&
+        incoming().name is string;
+      allow delete: if false; // Users cannot be deleted from client
+
+      // Businesses Sub-collection
+      match /businesses/{businessId} {
+        allow read, get, list: if isOwner(userId);
+        allow create, update: if isOwner(userId) && 
+          isValidId(businessId) &&
+          incoming().id == businessId &&
+          incoming().name is string && incoming().name.size() <= 200;
+        allow delete: if isOwner(userId);
+      }
+
+      // Customers Sub-collection
+      match /customers/{customerId} {
+        allow read, get, list: if isOwner(userId);
+        allow create, update: if isOwner(userId) && 
+          isValidId(customerId) &&
+          incoming().id == customerId &&
+          incoming().businessId is string &&
+          incoming().name is string && incoming().name.size() <= 200;
+        allow delete: if isOwner(userId);
+      }
+
+      // Transactions Sub-collection
+      match /transactions/{transactionId} {
+        allow read, get, list: if isOwner(userId);
+        allow create, update: if isOwner(userId) && 
+          isValidId(transactionId) &&
+          incoming().id == transactionId &&
+          incoming().businessId is string &&
+          incoming().amount is number &&
+          incoming().type is string &&
+          incoming().category is string;
+        allow delete: if isOwner(userId);
+      }
+
+      // Reminders Sub-collection
+      match /reminders/{reminderId} {
+        allow read, get, list: if isOwner(userId);
+        allow create, update: if isOwner(userId) && 
+          isValidId(reminderId) &&
+          incoming().id == reminderId &&
+          incoming().businessId is string &&
+          incoming().title is string &&
+          incoming().type is string;
+        allow delete: if isOwner(userId);
+      }
+
+      // GstFilings Sub-collection
+      match /gstFilings/{gstFilingId} {
+        allow read, get, list: if isOwner(userId);
+        allow create, update: if isOwner(userId) && 
+          isValidId(gstFilingId) &&
+          incoming().id == gstFilingId &&
+          incoming().businessId is string &&
+          incoming().month is string &&
+          incoming().year is number;
+        allow delete: if isOwner(userId);
+      }
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "453004277779",
+    "project_id": "sauh-ledger",
+    "storage_bucket": "sauh-ledger.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:453004277779:android:63b2154f4470c20bd727e6",
+        "android_client_info": {
+          "package_name": "com.sauhinc.sauhleger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "453004277779-1mfctib48r1p2eaj3f1psbh9d083derb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyoYkAvypmWsNl8XCObdtzUqG2Mp0DpaE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "453004277779-1mfctib48r1p2eaj3f1psbh9d083derb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
